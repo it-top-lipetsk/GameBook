@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using GameBook.Lib;
 using GameBook.Lib.Model;
 
@@ -8,19 +9,32 @@ namespace GameBook.App
 {
     public partial class MainWindow : Window
     {
-        public ObservableCollection<Game> Games { get; set; }
+        private ObservableCollection<Game> Games { get; set; }
+        private ObservableCollection<Genre> Genres { get; set; }
+
         public MainWindow()
         {
-            //BUG Не запускается
-            InitAsync();
+            Init();
             InitializeComponent();
+
+            ListGames.ItemsSource = Games;
         }
 
-        private async Task InitAsync()
+        private void Init()
         {
             var db = new GameBookDb();
-            var games = await db.GetAllGamesAsync();
-            Games = new ObservableCollection<Game>(games);
+            Games = new ObservableCollection<Game>(db.GetAllGames());
+            Genres = new ObservableCollection<Genre>(db.GetAllGenres());
+        }
+
+        private void ListGames_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var game = ListGames.SelectedItem as Game;
+
+            InputId.Text = game.Id.ToString();
+            InputName.Text = game.Name;
+            InputGenre.ItemsSource = Genres;
+            InputGenre.SelectedIndex = game.GenreId - 1;
         }
     }
 }

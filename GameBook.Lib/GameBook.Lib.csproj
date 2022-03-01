@@ -6,6 +6,13 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.2" />
+      <Content Include="..\game_book.db">
+        <Link>game_book.db</Link>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="..\SQL\create_tables.sql">
+        <Link>SQL\create_tables.sql</Link>
+      </Content>
     </ItemGroup>
 
 </Project>
